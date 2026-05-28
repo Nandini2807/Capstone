@@ -1,0 +1,18 @@
+{
+    "url": "https://parabank.parasoft.com/parabank/index.htm",
+
+    "validUser": {
+        "username": "john",
+        "password": "demo"
+    },
+
+    "pageTitle": "ParaBank",
+
+    "homePageText": "Customer Login",
+
+    "registerURL": "register",
+
+    "forgotLoginURL": "lookup",
+
+    "homePageURL": "index"
+}

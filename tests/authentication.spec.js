@@ -1,246 +1,259 @@
 // @ts-check
+
 import { test, expect } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
+import loginData from '../test-data/loginData.json';
 
-// Authentication Test Suite
 test.describe('Authentication Module', () => {
 
-    // Runs before every test
+    // =====================================================
+    // BEFORE EACH
+    // =====================================================
+
     test.beforeEach(async ({ page }) => {
 
-        // Open ParaBank website
         await page.goto(
             'https://parabank.parasoft.com/parabank/index.htm'
         );
     });
 
     // =====================================================
-    // TC01 - Valid Login
+    // SCREENSHOT ON FAILURE
+    // =====================================================
+
+    test.afterEach(async ({ page }, testInfo) => {
+
+        if (testInfo.status !== testInfo.expectedStatus) {
+
+            await page.screenshot({
+
+                path:
+                `screenshots/${testInfo.title.replace(/[^a-zA-Z0-9]/g, '_')}.png`,
+
+                fullPage: true
+            });
+        }
+    });
+
+    // =====================================================
+    // TC01 - VALID LOGIN
     // =====================================================
 
     test('TC01 - Valid Login', async ({ page }) => {
 
-        // Create LoginPage object
         const login = new LoginPage(page);
 
-        // Perform login
-        await login.login('john', 'demo');
+        await login.login(
 
-        // Wait until page fully loads
-        await page.waitForLoadState('networkidle');
+            loginData.validUser.username,
 
-        // Verify user redirected successfully
-        await expect(page)
-            .toHaveURL(/overview/);
+            loginData.validUser.password
+        );
+
+        await expect(page).toHaveURL(/overview/);
     });
 
     // =====================================================
-    // TC02 - Invalid Username
+    // TC02 - INVALID USERNAME
     // =====================================================
 
     test('TC02 - Invalid Username', async ({ page }) => {
 
         const login = new LoginPage(page);
 
-        // Enter wrong username
-        await login.login('wrongUser', 'demo');
+        await login.login(
 
-        // Wait for page load
-        await page.waitForLoadState('networkidle');
+            loginData.invalidUsername.username,
 
-        // Verify error message
-        await expect(
-            page.locator('.error')
-        ).toContainText('could not be verified');
+            loginData.invalidUsername.password
+        );
+
+        await expect(login.errorMessage)
+            .toContainText('could not be verified');
     });
 
     // =====================================================
-    // TC03 - Invalid Password
+    // TC03 - INVALID PASSWORD
     // =====================================================
 
     test('TC03 - Invalid Password', async ({ page }) => {
 
         const login = new LoginPage(page);
 
-        // Enter wrong password
-        await login.login('john', 'wrongPass');
+        await login.login(
 
-        // Wait for page load
-        await page.waitForLoadState('networkidle');
+            loginData.invalidPassword.username,
 
-        // Verify error message
-        await expect(
-            page.locator('.error')
-        ).toContainText('could not be verified');
+            loginData.invalidPassword.password
+        );
+
+        await expect(login.errorMessage)
+            .toContainText('could not be verified');
     });
 
     // =====================================================
-    // TC04 - Empty Username
+    // TC04 - EMPTY USERNAME
     // =====================================================
 
     test('TC04 - Empty Username', async ({ page }) => {
 
-        // Enter only password
-        await page.locator('input[name="password"]')
-            .fill('demo');
+        const login = new LoginPage(page);
 
-        // Click login
-        await page.locator('input[value="Log In"]')
-            .click();
+        await login.enterPassword(
+            loginData.emptyUsername.password
+        );
 
-        // Verify validation
-        await expect(page.locator('body'))
+        await login.clickLoginButton();
+
+        await expect(login.validationMessage)
             .toContainText('Please');
     });
 
     // =====================================================
-    // TC05 - Empty Password
+    // TC05 - EMPTY PASSWORD
     // =====================================================
 
     test('TC05 - Empty Password', async ({ page }) => {
 
-        // Enter only username
-        await page.locator('input[name="username"]')
-            .fill('john');
+        const login = new LoginPage(page);
 
-        // Click login
-        await page.locator('input[value="Log In"]')
-            .click();
+        await login.enterUsername(
+            loginData.emptyPassword.username
+        );
 
-        // Verify validation
-        await expect(page.locator('body'))
+        await login.clickLoginButton();
+
+        await expect(login.validationMessage)
             .toContainText('Please');
     });
 
     // =====================================================
-    // TC06 - Empty Credentials
+    // TC06 - EMPTY CREDENTIALS
     // =====================================================
 
     test('TC06 - Empty Credentials', async ({ page }) => {
 
-        // Click login directly
-        await page.locator('input[value="Log In"]')
-            .click();
+        const login = new LoginPage(page);
 
-        // Verify validation
-        await expect(page.locator('body'))
+        await login.clickLoginButton();
+
+        await expect(login.validationMessage)
             .toContainText('Please');
     });
 
     // =====================================================
-    // TC07 - Logout Validation
+    // TC07 - LOGOUT
     // =====================================================
 
     test('TC07 - Logout Validation', async ({ page }) => {
 
         const login = new LoginPage(page);
 
-        // Login
-        await login.login('john', 'demo');
+        await login.login(
 
-        // Click logout
-        await page.locator('text=Log Out')
-            .click();
+            loginData.validUser.username,
 
-        // Verify login button visible again
-        await expect(
-            page.locator('input[value="Log In"]')
-        ).toBeVisible();
+            loginData.validUser.password
+        );
+
+        await login.logout();
+
+        await expect(login.loginButton)
+            .toBeVisible();
     });
 
     // =====================================================
-    // TC08 - Password Field Masking
+    // TC08 - PASSWORD MASKING
     // =====================================================
 
     test('TC08 - Password Masking', async ({ page }) => {
 
-        // Verify password field type=password
-        await expect(
-            page.locator('input[name="password"]')
-        ).toHaveAttribute('type', 'password');
+        const login = new LoginPage(page);
+
+        await expect(login.passwordTextBox)
+            .toHaveAttribute('type', 'password');
     });
 
     // =====================================================
-    // TC09 - Login Button Visibility
+    // TC09 - LOGIN BUTTON VISIBLE
     // =====================================================
 
     test('TC09 - Login Button Visibility', async ({ page }) => {
 
-        // Verify login button visible
-        await expect(
-            page.locator('input[value="Log In"]')
-        ).toBeVisible();
+        const login = new LoginPage(page);
+
+        await expect(login.loginButton)
+            .toBeVisible();
     });
 
     // =====================================================
-    // TC10 - Username Field Visibility
+    // TC10 - USERNAME FIELD VISIBLE
     // =====================================================
 
     test('TC10 - Username Field Visibility', async ({ page }) => {
 
-        // Verify username field visible
-        await expect(
-            page.locator('input[name="username"]')
-        ).toBeVisible();
+        const login = new LoginPage(page);
+
+        await expect(login.usernameTextBox)
+            .toBeVisible();
     });
 
     // =====================================================
-    // TC11 - Password Field Visibility
+    // TC11 - PASSWORD FIELD VISIBILITY
     // =====================================================
 
     test('TC11 - Password Field Visibility', async ({ page }) => {
 
-        // Verify password field visible
-        await expect(
-            page.locator('input[name="password"]')
-        ).toBeVisible();
+        const login = new LoginPage(page);
+
+        await expect(login.passwordTextBox)
+            .toBeVisible();
     });
 
     // =====================================================
-    // TC12 - Page Title Validation
+    // TC12 - PAGE TITLE VALIDATION
     // =====================================================
 
     test('TC12 - Page Title Validation', async ({ page }) => {
 
-        // Verify page title
         await expect(page)
             .toHaveTitle(/ParaBank/);
     });
 
     // =====================================================
-    // TC13 - Register Link Validation
+    // TC13 - REGISTER LINK VALIDATION
     // =====================================================
 
     test('TC13 - Register Link Validation', async ({ page }) => {
 
-        // Verify register link visible
         await expect(
             page.locator('text=Register')
         ).toBeVisible();
     });
 
     // =====================================================
-    // TC14 - Forgot Login Info Link Validation
+    // TC14 - FORGOT LOGIN INFO LINK
     // =====================================================
 
     test('TC14 - Forgot Login Info Link Validation', async ({ page }) => {
 
-        // Verify forgot login info link visible
         await expect(
             page.locator('text=Forgot login info?')
         ).toBeVisible();
     });
 
     // =====================================================
-    // TC15 - Home Page Load Validation
+    // TC15 - HOME PAGE LOAD VALIDATION
     // =====================================================
 
-    test('TC15 - Home Page Load Validation', async ({ page }) => {
+    test( 'TC15 - Home Page Load Validation',
 
-        // Verify homepage loads correctly
-        await expect(
-            page.locator('body')
-        ).toContainText('Customer Login');
-    });
+        {
+            tag: '@smoke'
+        },
 
+        async ({ page }) => { await expect(page.locator('body'))
+                .toContainText('Customer Login');
+        }
+    );
 });

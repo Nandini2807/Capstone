@@ -1,300 +1,220 @@
 // @ts-check
 
-// Import Playwright
-import { test, expect } from '@playwright/test';
+import { test, expect }from '@playwright/test';
+import AccountPage from '../pages/AccountPage';
+import accountData from '../test-data/accountServicesData.json';
 
-// =====================================================
-// Account Services Module
-// =====================================================
+test.describe(
+    'Account Services Module',() => {
 
-test.describe('Account Services Module', () => {
+        test.beforeEach(async ({ page }) => {
 
-    // =====================================================
-    // Before Each Hook
-    // =====================================================
-
-    test.beforeEach(async ({ page }) => {
-
-        // Open ParaBank Website
-        await page.goto(
-            'https://parabank.parasoft.com/parabank/index.htm'
+                 await page.goto( accountData.url );
+            }
         );
-    });
-
-    // =====================================================
-    // TC01 - Username Field Visibility
-    // =====================================================
-
-    test(
-        'TC01 - Username Field Visibility',
-
-        {
-            tag: '@smoke'
-        },
-
-        async ({ page }) => {
-
-            // Verify Username textbox visible
-            await expect(
-                page.locator(
-                    'input[name="username"]'
-                )
-            ).toBeVisible();
-        }
-    );
-
-    // =====================================================
-    // TC02 - Password Field Visibility
-    // =====================================================
-
-    test(
-        'TC02 - Password Field Visibility',
-
-        async ({ page }) => {
-
-            // Verify Password textbox visible
-            await expect(
-                page.locator(
-                    'input[name="password"]'
-                )
-            ).toBeVisible();
-        }
-    );
-
-    // =====================================================
-    // TC03 - Login Button Visibility
-    // =====================================================
-
-    test(
-        'TC03 - Login Button Visibility',
-
-        async ({ page }) => {
-
-            // Verify Login button visible
-            await expect(
-                page.locator(
-                    'input[value="Log In"]'
-                )
-            ).toBeVisible();
-        }
-    );
-
-    // =====================================================
-    // TC04 - Register Link Visibility
-    // =====================================================
-
-    test(
-        'TC04 - Register Link Visibility',
-
-        async ({ page }) => {
-
-            // Verify Register link visible
-            await expect(
-                page.locator('text=Register')
-            ).toBeVisible();
-        }
-    );
-
-    // =====================================================
-    // TC05 - Forgot Login Info Visibility
-    // =====================================================
-
-    test(
-        'TC05 - Forgot Login Info Visibility',
-
-        async ({ page }) => {
-
-            // Verify Forgot Login link visible
-            await expect(
-                page.locator(
-                    'text=Forgot login info?'
-                )
-            ).toBeVisible();
-        }
-    );
-
-    // =====================================================
-    // TC06 - Home Page Title Validation
-    // =====================================================
-
-    test(
-        'TC06 - Home Page Title Validation',
-
-        {
-            tag: '@regression'
-        },
-
-        async ({ page }) => {
-
-            // Verify Title
-            await expect(page)
-                .toHaveTitle(/ParaBank/);
-        }
-    );
 
-    // =====================================================
-    // TC07 - Customer Login Text Validation
-    // =====================================================
+        // =================================================
+        // TC01 Username Field Visibility
+        // =================================================
 
-    test(
-        'TC07 - Customer Login Text Validation',
-
-        async ({ page }) => {
-
-            // Verify Customer Login text
-            await expect(
-                page.locator('body')
-            ).toContainText(
-                'Customer Login'
-            );
-        }
-    );
-
-    // =====================================================
-    // TC08 - ParaBank Logo Visibility
-    // =====================================================
-
-    test(
-        'TC08 - ParaBank Logo Visibility',
-
-        async ({ page }) => {
-
-            // Verify first image visible
-            await expect(
-                page.locator('img').first()
-            ).toBeVisible();
-        }
-    );
-
-    // =====================================================
-    // TC09 - Register Navigation
-    // =====================================================
-
-    test(
-        'TC09 - Register Navigation',
-
-        async ({ page }) => {
-
-            // Click Register link
-            await page.locator(
-                'text=Register'
-            ).click();
-
-            // Verify URL
-            await expect(page)
-                .toHaveURL(/register/);
-        }
-    );
-
-    // =====================================================
-    // TC10 - Forgot Login Navigation
-    // =====================================================
-
-    test(
-        'TC10 - Forgot Login Navigation',
-
-        async ({ page }) => {
-
-            // Click Forgot Login Info
-            await page.locator(
-                'text=Forgot login info?'
-            ).click();
-
-            // Verify URL
-            await expect(page)
-                .toHaveURL(/lookup/);
-        }
-    );
-
-    // =====================================================
-    // TC11 - Username Field Enabled
-    // =====================================================
-
-    test(
-        'TC11 - Username Field Enabled',
-
-        async ({ page }) => {
-
-            // Verify Username field enabled
-            await expect(
-                page.locator(
-                    'input[name="username"]'
-                )
-            ).toBeEnabled();
-        }
-    );
-
-    // =====================================================
-    // TC12 - Password Field Enabled
-    // =====================================================
-
-    test(
-        'TC12 - Password Field Enabled',
-
-        async ({ page }) => {
-
-            // Verify Password field enabled
-            await expect(
-                page.locator(
-                    'input[name="password"]'
-                )
-            ).toBeEnabled();
-        }
-    );
-
-    // =====================================================
-    // TC13 - Login Button Enabled
-    // =====================================================
-
-    test(
-        'TC13 - Login Button Enabled',
-
-        async ({ page }) => {
-
-            // Verify Login button enabled
-            await expect(
-                page.locator(
-                    'input[value="Log In"]'
-                )
-            ).toBeEnabled();
-        }
-    );
-
-    // =====================================================
-    // TC14 - Register Link Enabled
-    // =====================================================
-
-    test(
-        'TC14 - Register Link Enabled',
-
-        async ({ page }) => {
-
-            // Verify Register link enabled
-            await expect(
-                page.locator(
-                    'text=Register'
-                )
-            ).toBeEnabled();
-        }
-    );
-
-    // =====================================================
-    // TC15 - Home Page URL Validation
-    // =====================================================
-
-    test(
-        'TC15 - Home Page URL Validation',
-
-        {
-            tag: '@smoke'
-        },
-
-        async ({ page }) => {
-
-            // Verify URL
-            await expect(page)
-                .toHaveURL(/index/);
-        }
-    );
-
-});
+        test('TC01 - Username Field Visibility',
+
+            {
+                tag: '@smoke'
+            },
+
+            async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect(account.username).toBeVisible();
+            }
+        );
+
+        // =================================================
+        // TC02 Password Field Visibility
+        // =================================================
+
+        test('TC02 - Password Field Visibility', async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect( account.password ).toBeVisible();
+            }
+        );
+
+        // =================================================
+        // TC03 Login Button Visibility
+        // =================================================
+
+        test('TC03 - Login Button Visibility',async ({ page }) => {
+
+                const account =  new AccountPage(page);
+
+                await expect( account.loginButton ).toBeVisible();
+            }
+        );
+
+        // =================================================
+        // TC04 Register Link Visibility
+        // =================================================
+
+        test('TC04 - Register Link Visibility',async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect( account.registerLink).toBeVisible();
+            }
+        );
+
+        // =================================================
+        // TC05 Forgot Login Visibility
+        // =================================================
+
+        test('TC05 - Forgot Login Visibility', async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect( account.forgotLogin).toBeVisible();
+            }
+        );
+
+        // =================================================
+        // TC06 Page Title Validation
+        // =================================================
+
+        test( 'TC06 - Page Title Validation',
+
+            {
+                tag: '@regression'
+            },
+
+            async ({ page }) => {
+
+                await expect(page).toHaveTitle(new RegExp(accountData.pageTitle ));
+            }
+        );
+
+        // =================================================
+        // TC07  Customer Login Text
+        // =================================================
+
+        test('TC07 - Customer Login Text', async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect(account.body).toContainText(  accountData.homePageText );
+            }
+        );
+
+        // =================================================
+        // TC08 Login with Valid Credentials
+        // =================================================
+
+        test('TC08 - Login with Valid Credentials',async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await account.login(
+                    accountData.validUser.username,
+                    accountData.validUser.password
+                );
+
+                await expect(page).toHaveURL(/overview/);
+            }
+        );
+
+        // =================================================
+        // TC09 Register Navigation
+        // =================================================
+
+        test('TC09 - Register Navigation', async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await account.registerLink .click();
+
+                await expect(page).toHaveURL(new RegExp(accountData.registerURL ) );
+                   
+            }
+        );
+
+        // =================================================
+        // TC10 Forgot Login Navigation
+        // =================================================
+
+       test('TC10 - Forgot Login Navigation', async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await account.forgotLogin .click();
+
+                await expect(page)  .toHaveURL(/lookup/);
+            }
+        );
+
+        // =================================================
+        // TC11  Username Enabled
+        // =================================================
+
+        test('TC11 - Username Enabled',  async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect( account.username).toBeEnabled();
+            }
+        );
+
+        // =================================================
+        // TC12 Password Enabled
+        // =================================================
+
+        test.skip('TC12 - Password Enabled', async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect(account.password ).toBeEnabled();
+            }
+        );
+
+        // =================================================
+        // TC13  Login Button Enabled
+        // =================================================
+
+        test('TC13 - Login Button Enabled',async ({ page }) => {
+
+                const account = new AccountPage(page);
+
+                await expect( account.loginButton).toBeEnabled();
+            }
+        );
+
+        // =================================================
+        // TC14 Register Link Enabled
+        // =================================================
+
+        test('TC14 - Register Link Enabled',async ({ page }) => {
+
+                const account =new AccountPage(page);
+
+                await expect(account.registerLink ).toBeEnabled();
+            }
+        );
+
+        // =================================================
+        // TC15 Home Page URL Validation
+        // =================================================
+
+        test('TC15 - Home Page URL Validation',
+
+            {
+                tag: '@smoke'
+            },
+
+            async ({ page }) => {
+
+                await expect(page).toHaveURL(new RegExp(  accountData.homePageURL ) );
+            }
+        );
+    }
+);

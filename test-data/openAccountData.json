@@ -1,0 +1,15 @@
+{
+    "validUser": {
+
+        "username": "john",
+
+        "password": "demo"
+    },
+
+    "accountType": {
+
+        "savings": "1",
+
+        "current": "0"
+    }
+}

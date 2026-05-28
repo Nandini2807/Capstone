@@ -1,97 +1,70 @@
-// Account Page Class
-
 class AccountPage {
-
-    // Constructor
     constructor(page) {
 
-        // Store page object
         this.page = page;
 
-        // =====================================================
-        // Login Locators
-        // =====================================================
+        this.username = page.locator( 'input[name="username"]');
 
-        // Username textbox
-        this.username =
-            page.locator('input[name="username"]');
+        this.password = page.locator('input[name="password"]' );
 
-        // Password textbox
-        this.password =
-            page.locator('input[name="password"]');
+        this.loginButton = page.locator( 'input[value="Log In"]' );
 
-        // Login button
-        this.loginButton =
-            page.locator('input[value="Log In"]');
+        // =================================================
+        // LINK LOCATORS
+        // =================================================
 
-        // =====================================================
-        // Account Service Locators
-        // =====================================================
+        this.registerLink = page.locator( 'text=Register'  );
 
-        // Accounts Overview Link
-        this.accountOverview =
-            page.locator('text=Accounts Overview');
+        this.forgotLogin = page.locator('text=Forgot login info?' );
 
-        // Open New Account Link
-        this.openNewAccount =
-            page.locator('text=Open New Account');
+        // =================================================
+        // ACCOUNT SERVICE LOCATORS
+        // =================================================
 
-        // Transfer Funds Link
-        this.transferFunds =
-            page.locator('text=Transfer Funds');
+        this.accountOverview = page.locator('text=Accounts Overview');
 
-        // Bill Pay Link
-        this.billPay =
-            page.locator('text=Bill Pay');
+        this.openNewAccount = page.locator('text=Open New Account' );
 
-        // Find Transactions Link
-        this.findTransactions =
-            page.locator('text=Find Transactions');
+        this.transferFunds = page.locator( 'text=Transfer Funds' );
 
-        // Update Contact Info Link
-        this.updateContactInfo =
-            page.locator('text=Update Contact Info');
+        this.billPay = page.locator( 'text=Bill Pay' );
 
-        // Request Loan Link
-        this.requestLoan =
-            page.locator('text=Request Loan');
+        this.findTransactions = page.locator( 'text=Find Transactions' );
 
-        // Logout Link
-        this.logout =
-            page.locator('text=Log Out');
+        this.updateContactInfo = page.locator('text=Update Contact Info' );
 
-        // Body Locator
-        this.body =
-            page.locator('body');
+        this.requestLoan = page.locator( 'text=Request Loan');
+
+        this.logout = page.locator('text=Log Out' );
+
+        this.body = page.locator('body');
     }
 
-    // =====================================================
-    // Open Application
-    // =====================================================
+    // =================================================
+    // OPEN APPLICATION
+    // =================================================
 
     async openApplication() {
 
-        await this.page.goto(
-            'https://parabank.parasoft.com/parabank/index.htm'
-        );
+        await this.page.goto('https://parabank.parasoft.com/parabank/index.htm');
     }
 
-    // =====================================================
-    // Login Method
-    // =====================================================
+    // =================================================
+    // LOGIN METHOD
+    // =================================================
 
     async login(username, password) {
 
-        // Enter Username
-        await this.username.fill(username);
+        await this.username.fill( username);
 
-        // Enter Password
         await this.password.fill(password);
 
-        // Click Login
         await this.loginButton.click();
     }
 }
 
-// Export Class
+// =====================================================
+// EXPORT CLASS
+// =====================================================
+
 export default AccountPage;

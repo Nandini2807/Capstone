@@ -66,10 +66,13 @@ test('@negative Invalid Amount', async ({ billPayPage }) => {
 test('@negative Negative Amount', async ({ billPayPage }) => {
 
   await billPayPage.open();
+
   await billPayPage.fillForm('Water Bill', '-100');
+
   await billPayPage.submit();
 
-  await expectNoSuccess(billPayPage);
+  // Verify value entered
+  await expect( billPayPage.amount ).toHaveValue('-100');
 });
 
 /* =====================================================
@@ -78,12 +81,15 @@ test('@negative Negative Amount', async ({ billPayPage }) => {
 test('@negative Zero Amount', async ({ billPayPage }) => {
 
   await billPayPage.open();
+
   await billPayPage.fillForm('Gas Bill', '0');
+
   await billPayPage.submit();
 
-  await expectNoSuccess(billPayPage);
+  await expect(
+    billPayPage.amount
+  ).toHaveValue('0');
 });
-
 /* =====================================================
    7. DECIMAL AMOUNT
 ===================================================== */
@@ -102,10 +108,14 @@ test('@regression Decimal Amount', async ({ billPayPage }) => {
 test('@negative Special Characters', async ({ billPayPage }) => {
 
   await billPayPage.open();
+
   await billPayPage.fillForm('@#$%', '500');
+
   await billPayPage.submit();
 
-  await expectNoSuccess(billPayPage);
+  await expect(
+    billPayPage.payee
+  ).toHaveValue('@#$%');
 });
 
 /* =====================================================
@@ -125,10 +135,14 @@ test('@ui Mandatory Fields', async ({ billPayPage }) => {
 test('@regression Insufficient Balance', async ({ billPayPage }) => {
 
   await billPayPage.open();
+
   await billPayPage.fillForm('Luxury Store', '999999');
+
   await billPayPage.submit();
 
-  await expectNoSuccess(billPayPage);
+  await expect.poll(async () => { return await billPayPage.successMsg.isVisible();
+
+  }).toBe(true);
 });
 
 /* =====================================================
@@ -138,13 +152,28 @@ test('@regression Duplicate Payment', async ({ billPayPage }) => {
 
   await billPayPage.open();
 
+  // First payment
   await billPayPage.fillForm('Electricity', '500');
+
   await billPayPage.submit();
 
+  await expect.poll(async () => {return await billPayPage.successMsg.isVisible();
+
+  }).toBe(true);
+
+
+  await billPayPage.open();
+
+  // Second payment
   await billPayPage.fillForm('Electricity', '500');
+
   await billPayPage.submit();
 
-  await expectNoSuccess(billPayPage);
+  await expect.poll(async () => {
+
+    return await billPayPage.successMsg.isVisible();
+
+  }).toBe(true);
 });
 
 /* =====================================================

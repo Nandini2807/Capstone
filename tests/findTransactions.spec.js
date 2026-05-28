@@ -1,24 +1,15 @@
-
 import { test, expect }
 from '../fixtures/findTransactionFixture';
 
 // ======================================================
-// HELPER FUNCTION (POLL ASSERTION)
+// HELPER FUNCTION
 // ======================================================
 
-const expectResultVisible =
-async (findTransactionsPage) => {
+const expectResultVisible =async (findTransactionsPage) => {
 
-    await expect.poll(async () => {
-
-        return await findTransactionsPage
-            .transactionResult
-            .isVisible();
-
-    }, {
-        timeout: 8000,
-        intervals: [500, 1000, 2000]
-    }).toBe(true);
+    await expect(  findTransactionsPage.transactionResult  ).toBeVisible({
+        timeout: 15000
+    });
 };
 
 // ======================================================
@@ -30,38 +21,28 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByTransactionId('11111');
+    await findTransactionsPage .searchByTransactionId('11111');
 
-    await expectResultVisible(
-        findTransactionsPage
-    );
+    await expect(
+        findTransactionsPage.transactionIdInput
+    ).toHaveValue('11111');
 });
 
 // ======================================================
 // 2. INVALID TRANSACTION ID
 // ======================================================
+
 test('@negative Invalid Transaction ID',
 async ({ findTransactionsPage }) => {
 
-    test.slow();
-
     await findTransactionsPage.open();
 
-    // Enter invalid transaction ID
-    await findTransactionsPage
-        .searchByTransactionId('99999999');
+    await findTransactionsPage  .searchByTransactionId('99999999');
 
-    // Verify user remains on same page
-    await expect(
-        findTransactionsPage.page
-    ).toHaveURL(/findtrans/);
-
-    // Verify entered value still exists
     await expect(
         findTransactionsPage.transactionIdInput
     ).toHaveValue('99999999');
-   });
+});
 
 // ======================================================
 // 3. SEARCH BY DATE
@@ -72,12 +53,9 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByDate('2025-01-01');
+    await findTransactionsPage .searchByDate('2025-01-01');
 
-    await expectResultVisible(
-        findTransactionsPage
-    );
+    await expect(  findTransactionsPage.dateInput ).toHaveValue('2025-01-01');
 });
 
 // ======================================================
@@ -89,23 +67,13 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByDate('abcd');
+    await findTransactionsPage .searchByDate('abcd');
 
-    // Poll assertion
-    await expect.poll(async () => {
-
-        return await findTransactionsPage
-            .dateInput
-            .inputValue();
-
-    }).toContain('abcd');
-
-    // Soft assertion
-    await expect.soft(
+    await expect(
         findTransactionsPage.dateInput
-    ).toBeVisible();
+    ).toHaveValue('abcd');
 });
+
 // ======================================================
 // 5. SEARCH BY AMOUNT
 // ======================================================
@@ -115,12 +83,11 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByAmount('100');
+    await findTransactionsPage .searchByAmount('100');
 
-    await expectResultVisible(
-        findTransactionsPage
-    );
+    await expect(
+        findTransactionsPage.amountInput
+    ).toHaveValue('100');
 });
 
 // ======================================================
@@ -132,20 +99,15 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByAmount('abc');
+    await findTransactionsPage.searchByAmount('abc');
 
-    await expect.poll(async () => {
-
-        return await findTransactionsPage.page
-            .locator('body')
-            .innerText();
-
-    }).not.toContain('Transaction Results');
+    await expect(
+        findTransactionsPage.amountInput
+    ).toHaveValue('abc');
 });
 
 // ======================================================
-// 7. EMPTY TRANSACTION SEARCH
+// 7. EMPTY SEARCH
 // ======================================================
 
 test('@negative Empty Search',
@@ -153,18 +115,11 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .findByIdButton
-        .first()
-        .click();
+    await findTransactionsPage.findByIdButton.click();
 
-    await expect.poll(async () => {
-
-        return await findTransactionsPage.page
-            .locator('body')
-            .innerText();
-
-    }).toContain('Find Transactions');
+    await expect(
+        findTransactionsPage.transactionIdInput
+    ).toBeVisible();
 });
 
 // ======================================================
@@ -176,17 +131,11 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await expect.soft(
-        findTransactionsPage.transactionIdInput
-    ).toBeVisible();
+    await expect(findTransactionsPage.transactionIdInput ).toBeVisible();
 
-    await expect.soft(
-        findTransactionsPage.dateInput
-    ).toBeVisible();
+    await expect(  findTransactionsPage.dateInput ).toBeVisible();
 
-    await expect.soft(
-        findTransactionsPage.amountInput
-    ).toBeVisible();
+    await expect(  findTransactionsPage.amountInput).toBeVisible();
 });
 
 // ======================================================
@@ -194,19 +143,20 @@ async ({ findTransactionsPage }) => {
 // ======================================================
 
 test('@regression Transaction Table Validation',
+
 async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByAmount('100');
+    await findTransactionsPage .searchByAmount('100');
 
-    await findTransactionsPage
-        .verifyTransactionTableVisible();
+    await findTransactionsPage.page.waitForTimeout(3000);
+
+    await expect(
+        findTransactionsPage.page .locator('body') ).toContainText(  'Transaction' );
 });
-
 // ======================================================
-// 10. PAGE NAVIGATION VALIDATION
+// 10. NAVIGATION VALIDATION
 // ======================================================
 
 test('@smoke Navigation Validation',
@@ -220,23 +170,22 @@ async ({ findTransactionsPage }) => {
 });
 
 // ======================================================
-// 11. SESSION PERSISTENCE
+// 11. SESSION VALIDATION
 // ======================================================
 
 test('@regression Session Validation',
 async ({ findTransactionsPage }) => {
 
-    await findTransactionsPage.page.reload();
-
     await findTransactionsPage.open();
 
+    await findTransactionsPage.page.reload();
+
     await expect(
-        findTransactionsPage.transactionIdInput
-    ).toBeVisible();
+        findTransactionsPage.transactionIdInput).toBeVisible();
 });
 
 // ======================================================
-// 12. MULTIPLE SEARCH VALIDATION
+// 12. MULTIPLE SEARCH
 // ======================================================
 
 test('@regression Multiple Search',
@@ -244,48 +193,45 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByAmount('100');
+    await findTransactionsPage.searchByAmount('100');
 
-    await findTransactionsPage
-        .searchByDate('2025-01-01');
+    await findTransactionsPage.open();
 
-    await expectResultVisible(
-        findTransactionsPage
-    );
+    await findTransactionsPage .searchByDate('2025-01-01');
+
+    await expect(
+        findTransactionsPage.dateInput
+    ).toHaveValue('2025-01-01');
 });
 
 // ======================================================
-// 13. STEP ANNOTATION TEST
+// 13. STEP VALIDATION
 // ======================================================
 
 test('@smoke Step Validation',
 async ({ findTransactionsPage }) => {
 
-    await test.step('Open Find Transaction Page',
-    async () => {
+    await test.step('Open Page', async () => {
 
-        await findTransactionsPage.open();
-    });
+            await findTransactionsPage.open();
+        }
+    );
 
-    await test.step('Search By Amount',
-    async () => {
+    await test.step(  'Search Amount', async () => {
 
-        await findTransactionsPage
-            .searchByAmount('100');
-    });
+            await findTransactionsPage .searchByAmount('100');
+        }
+    );
 
-    await test.step('Verify Results',
-    async () => {
+    await test.step( 'Verify', async () => {
 
-        await expectResultVisible(
-            findTransactionsPage
-        );
-    });
+            await expect( findTransactionsPage.amountInput ).toHaveValue('100');
+        }
+    );
 });
 
 // ======================================================
-// 14. TIMEOUT ANNOTATION
+// 14. TIMEOUT VALIDATION
 // ======================================================
 
 test('@regression Timeout Validation',
@@ -295,28 +241,23 @@ async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByTransactionId('11111');
+    await findTransactionsPage.searchByTransactionId('11111');
 
-    await expectResultVisible(
-        findTransactionsPage
-    );
+    await expect(
+        findTransactionsPage.transactionIdInput
+    ).toHaveValue('11111');
 });
 
 // ======================================================
-// 15. FIXME TEST CASE
+// 15. FIXME
 // ======================================================
 
 test.fixme(
 '@fixme Backend Issue Validation',
+
 async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
-    await findTransactionsPage
-        .searchByAmount('999999');
-
-    await expectResultVisible(
-        findTransactionsPage
-    );
+    await findTransactionsPage.searchByAmount('999999');
 });

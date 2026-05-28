@@ -1,0 +1,27 @@
+{
+    "validUser": {
+
+        "firstName": "Nandini",
+        "lastName": "Jadhav",
+        "address": "Pune",
+        "city": "Pune",
+        "state": "MH",
+        "zipCode": "411001",
+        "phoneNumber": "9999999999",
+        "ssn": "1111",
+        "password": "demo123"
+    },
+
+    "invalidUser": {
+
+        "firstName": "",
+        "lastName": "",
+        "address": "",
+        "city": "",
+        "state": "",
+        "zipCode": "",
+        "phoneNumber": "",
+        "ssn": "",
+        "password": ""
+    }
+}

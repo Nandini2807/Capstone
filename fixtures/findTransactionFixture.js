@@ -1,32 +1,31 @@
 
-import { test as base, expect }
-from '@playwright/test';
+import { test as base } from '@playwright/test';
 
-import LoginPage
-from '../pages/LoginPage';
-
-import FindTransactionsPage
-from '../pages/FindTransactionsPage';
+import { FindTransactionsPage }from '../pages/FindTransactionsPage';
 
 export const test = base.extend({
 
-    findTransactionsPage:
-    async ({ page }, use) => {
+    findTransactionsPage: async ({ page }, use) => {
 
-        // ================= LOGIN =================
+        
+        await page.goto( 'https://parabank.parasoft.com/parabank/index.htm');
 
-        const loginPage =
-            new LoginPage(page);
+        await page.locator('input[name="username"]' ).fill('john');
 
-        await loginPage.gotoLoginPage();
+        await page.locator('input[name="password"]' ).fill('demo');
 
-        await loginPage.login('john', 'demo');
+        await page.locator('input[value="Log In"]' ).click();
 
-        await expect(
-            page.locator('text=Log Out')
-        ).toBeVisible();
+        await page.waitForURL(
+            '**/overview.htm',
+            {
+                timeout: 20000
+            }
+        );
 
-        // ================= PAGE OBJECT =================
+        // ======================================================
+        // CREATE PAGE OBJECT
+        // ======================================================
 
         const findTransactionsPage =
             new FindTransactionsPage(page);
@@ -35,4 +34,5 @@ export const test = base.extend({
     }
 });
 
-export { expect };
+export { expect }
+from '@playwright/test';

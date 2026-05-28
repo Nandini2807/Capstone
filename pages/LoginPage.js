@@ -1,47 +1,43 @@
-// Login Page Class
-
 class LoginPage {
 
-    // Constructor
     constructor(page) {
 
-        // Store page instance
+        // =====================================================
+        // STORE PAGE
+        // =====================================================
+
         this.page = page;
 
-        // Username textbox
+        // =====================================================
+        // LOCATORS
+        // =====================================================
+
         this.usernameTextBox =
             page.locator('input[name="username"]');
 
-        // Password textbox
         this.passwordTextBox =
             page.locator('input[name="password"]');
 
-        // Login button
         this.loginButton =
             page.locator('input[value="Log In"]');
 
-        // Logout link
         this.logoutLink =
             page.locator('text=Log Out');
 
-        // Accounts Overview text
         this.accountOverviewText =
             page.locator('text=Accounts Overview');
 
-        // Error message
         this.errorMessage =
-            page.locator(
-                'text=The username and password could not be verified'
-            );
+            page.locator('.error');
 
-        // Empty credential validation
-        this.emptyValidationMessage =
-            page.locator(
-                'text=Please enter a username and password'
-            );
+        this.validationMessage =
+            page.locator('body');
     }
 
-    // Open application
+    // =====================================================
+    // OPEN LOGIN PAGE
+    // =====================================================
+
     async gotoLoginPage() {
 
         await this.page.goto(
@@ -49,92 +45,90 @@ class LoginPage {
         );
     }
 
-    // Enter username
+    // =====================================================
+    // ENTER USERNAME
+    // =====================================================
+
     async enterUsername(username) {
 
         await this.usernameTextBox.fill(username);
     }
 
-    // Enter password
+    // =====================================================
+    // ENTER PASSWORD
+    // =====================================================
+
     async enterPassword(password) {
 
         await this.passwordTextBox.fill(password);
     }
 
-    // Click login button
+    // =====================================================
+    // CLICK LOGIN BUTTON
+    // =====================================================
+
     async clickLoginButton() {
 
         await this.loginButton.click();
     }
 
-    // Complete login process
+    // =====================================================
+    // COMPLETE LOGIN
+    // =====================================================
+
     async login(username, password) {
 
-        // Fill username
         await this.enterUsername(username);
 
-        // Fill password
         await this.enterPassword(password);
 
-        // Click login
         await this.clickLoginButton();
     }
 
-    // Logout from application
+    // =====================================================
+    // LOGOUT
+    // =====================================================
+
     async logout() {
 
         await this.logoutLink.click();
     }
 
-    // Verify successful login
+    // =====================================================
+    // VERIFY SUCCESSFUL LOGIN
+    // =====================================================
+
     async verifySuccessfulLogin() {
 
         await this.accountOverviewText.waitFor({
+
             state: 'visible'
         });
     }
 
-    // Verify invalid login
+    // =====================================================
+    // VERIFY INVALID LOGIN
+    // =====================================================
+
     async verifyInvalidLogin() {
 
         await this.errorMessage.waitFor({
+
             state: 'visible'
         });
     }
 
-    // Verify empty field validation
-    async verifyEmptyValidation() {
+    // =====================================================
+    // VERIFY VALIDATION MESSAGE
+    // =====================================================
 
-        await this.emptyValidationMessage.waitFor({
+    async verifyValidationMessage() {
+
+        await this.validationMessage.waitFor({
+
             state: 'visible'
         });
-    }
-
-    // Verify login button visible
-    async verifyLoginButtonVisible() {
-
-        await this.loginButton.isVisible();
-    }
-
-    // Verify username textbox visible
-    async verifyUsernameVisible() {
-
-        await this.usernameTextBox.isVisible();
-    }
-
-    // Verify password textbox visible
-    async verifyPasswordVisible() {
-
-        await this.passwordTextBox.isVisible();
-    }
-
-    // Verify password masking
-    async verifyPasswordMasked() {
-
-        await this.passwordTextBox
-            .toHaveAttribute('type', 'password');
     }
 }
 
-// Export class
 export default LoginPage;

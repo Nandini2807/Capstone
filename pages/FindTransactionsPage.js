@@ -1,89 +1,83 @@
-
 import { expect } from '@playwright/test';
 
-export default class FindTransactionsPage {
+export class FindTransactionsPage {
 
     constructor(page) {
 
         this.page = page;
 
-        // ================= LOCATORS =================
+        this.findTransactionLink = page.locator('a[href*="findtrans"]');
 
-        this.findTransactionLink =
-            page.locator('text=Find Transactions');
+        this.transactionIdInput = page.locator('#transactionId');
 
-        this.transactionIdInput =
-            page.locator('#transactionId');
+        this.findByIdButton = page.locator('button:has-text("Find Transactions")').first();
 
-        this.findByIdButton =
-            page.locator('button:has-text("Find Transactions")');
+        this.dateInput = page.locator('#transactionDate');
 
-        this.dateInput =
-            page.locator('#transactionDate');
+        this.findByDateButton = page.locator('button:has-text("Find Transactions")').nth(1);
 
-        this.amountInput =
-            page.locator('#amount');
+        this.amountInput = page.locator('#amount');
 
-        this.resultTable =
-            page.locator('#transactionTable');
+        this.findByAmountButton = page.locator('button:has-text("Find Transactions")').nth(2);
 
-        this.noTransactionText =
-            page.locator('text=No transactions found');
+        this.transactionResult = page.locator('#transactionTable');
 
-        this.transactionResult =
-            page.locator('#rightPanel');
-
-        this.errorMessage =
-            page.locator('.error');
+        this.transactionTable = page.locator('#transactionTable');
     }
 
-    // ================= NAVIGATION =================
+    // ======================================================
+    // OPEN PAGE
+    // ======================================================
 
     async open() {
 
         await this.findTransactionLink.click();
+
+        await this.page.waitForLoadState('domcontentloaded');
     }
 
-    // ================= ACTIONS =================
+    // ======================================================
+    // SEARCH BY TRANSACTION ID
+    // ======================================================
 
     async searchByTransactionId(id) {
 
         await this.transactionIdInput.fill(id);
 
-        await this.findByIdButton.first().click();
+        await this.findByIdButton.click();
     }
+
+    // ======================================================
+    // SEARCH BY DATE
+    // ======================================================
 
     async searchByDate(date) {
 
         await this.dateInput.fill(date);
 
-        await this.findByIdButton.nth(1).click();
+        await this.findByDateButton.click();
     }
+
+    // ======================================================
+    // SEARCH BY AMOUNT
+    // ======================================================
 
     async searchByAmount(amount) {
 
         await this.amountInput.fill(amount);
 
-        await this.findByIdButton.last().click();
+        await this.findByAmountButton.click();
     }
 
-    // ================= VALIDATIONS =================
-
-    async verifyResultVisible() {
-
-        await expect(this.transactionResult)
-            .toBeVisible();
-    }
-
-    async verifyNoTransactionMessage() {
-
-        await expect(this.noTransactionText)
-            .toBeVisible();
-    }
+    // ======================================================
+    // VERIFY TABLE
+    // ======================================================
 
     async verifyTransactionTableVisible() {
 
-        await expect(this.resultTable)
-            .toBeVisible();
+        await expect(this.transactionTable)
+            .toBeVisible({
+                timeout: 15000
+            });
     }
 }

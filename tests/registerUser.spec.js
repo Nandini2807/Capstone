@@ -1,247 +1,221 @@
 // @ts-check
-
-
 import { test, expect } from '@playwright/test';
-
-// Import Register Page
 import RegisterPage from '../pages/RegisterPage';
+import registerData from '../test-data/registerData.json';
 
 // =====================================================
-// Registration Module
+// REGISTRATION MODULE
 // =====================================================
 
-test.describe('Registration Module', () => {
-
-    // =====================================================
-    // Before Each Hook
-    // =====================================================
-
-    test.beforeEach(async ({ page }) => {
-
-        // Open Registration Page
-        await page.goto(
-            'https://parabank.parasoft.com/parabank/register.htm'
+test.describe.parallel(
+    'Registration Module',() => {
+        test.beforeEach( async ({ page }) => {
+                await page.goto(
+                    'https://parabank.parasoft.com/parabank/register.htm'
+                );
+            }
         );
-    });
 
-    // =====================================================
-    // TC01 - Valid Registration
-    // =====================================================
+        // =====================================================
+        // SCREENSHOT ON FAILURE
+        // =====================================================
 
-    test(
-        'TC01 - Valid Registration',
+        test.afterEach( async ({ page }, testInfo) => {
 
-        {
-            tag: ['@smoke', '@regression']
-        },
+                if (
+                    testInfo.status !==
+                    testInfo.expectedStatus
+                ) {
 
-        async ({ page }) => {
+                    await page.screenshot({
 
-            // Create RegisterPage object
-            const register = new RegisterPage(page);
+                        path:
+                        `screenshots/${testInfo.title.replace(/[^a-zA-Z0-9]/g, '_')}.png`,
 
-            // Generate Dynamic Username
-            const username =
-                `nandini${Date.now()}`;
-
-            // User Test Data
-            const user = {
-
-                firstName: 'Nandini',
-                lastName: 'Jadhav',
-                address: 'Pune',
-                city: 'Pune',
-                state: 'MH',
-                zipCode: '411001',
-                phoneNumber: '9999999999',
-                ssn: '1111',
-                username: username,
-                password: 'demo123'
-            };
-
-            // Annotation Step
-            await test.step(
-                'Fill Registration Form',
-                async () => {
-
-                    await register.registerUser(user);
+                        fullPage: true
+                    });
                 }
-            );
+            }
+        );
 
-            // Wait for complete load
-            await page.waitForLoadState('networkidle');
+        // =====================================================
+        // TC01 Valid Registration
+        // =====================================================
 
-            // Verify Registration Success
-            await expect(
-                page.locator('body')
-            ).toContainText(
-                'Your account was created successfully'
-            );
-        }
-    );
+        test( 'TC01 - Valid Registration', async ({ page }) => {
+                const register = new RegisterPage(page);
 
-    // =====================================================
-    // TC02 - Register Button Visibility
-    // =====================================================
+                const user = {...registerData.validUser,
+                    username:  `nandini${Date.now()}` };
 
-    test(
-        'TC02 - Register Button Visibility',
+                // Register User
+                await register.registerUser( user );
 
-        {
-            tag: '@smoke'
-        },
+                // Verify Success
+                await expect(register.successMessage).toContainText( 'Your account was created successfully');
+            }
+        );
 
-        async ({ page }) => {
+        // =====================================================
+        // TC02 Register Button Visibility
+        // =====================================================
 
-            const register = new RegisterPage(page);
+        test('TC02 - Register Button Visibility',async ({ page }) => {
 
-            // Soft Assertion
-            await expect.soft(
-                register.registerButton
-            ).toBeVisible();
-        }
-    );
+                const register =new RegisterPage(page);
 
-    // =====================================================
-    // TC03 - Username Field Visibility
-    // =====================================================
+                await expect( register.registerButton ).toBeVisible();
+            }
+        );
 
-    test(
-        'TC03 - Username Field Visibility',
+        // =====================================================
+        // TC03 Username Field Visibility
+        // =====================================================
 
-        async ({ page }) => {
+        test('TC03 - Username Field Visibility',async ({ page }) => {
 
-            const register = new RegisterPage(page);
+                const register =new RegisterPage(page);
+                await expect(register.username).toBeVisible();
+            }
+        );
 
-            // Hard Assertion
-            await expect(
-                register.username
-            ).toBeVisible();
-        }
-    );
+        // =====================================================
+        // TC04  Password Field Visibility
+        // =====================================================
 
-    // =====================================================
-    // TC04 - Password Field Visibility
-    // =====================================================
+        test('TC04 - Password Field Visibility', async ({ page }) => {
 
-    test(
-        'TC04 - Password Field Visibility',
+                const register = new RegisterPage(page);
 
-        async ({ page }) => {
+                await expect(register.password).toBeVisible();
+            }
+        );
 
-            const register = new RegisterPage(page);
+        // =====================================================
+        // TC05 Confirm Password Visibility
+        // =====================================================
 
-            // Hard Assertion
-            await expect(
-                register.password
-            ).toBeVisible();
-        }
-    );
+        test('TC05 - Confirm Password Visibility',async ({ page }) => {
 
-    // =====================================================
-    // TC05 - Confirm Password Visibility
-    // =====================================================
+                const register =  new RegisterPage(page);
 
-    test(
-        'TC05 - Confirm Password Visibility',
+                await expect( register.confirmPassword).toBeVisible();
+            }
+        );
 
-        async ({ page }) => {
+        // =====================================================
+        // TC06 Registration Page Title
+        // =====================================================
 
-            const register = new RegisterPage(page);
+        test('TC06 - Registration Page Title',async ({ page }) => {
+            await expect(page).toHaveTitle(/ParaBank/);
+            }
+        );
 
-            // Hard Assertion
-            await expect(
-                register.confirmPassword
-            ).toBeVisible();
-        }
-    );
+        // =====================================================
+        // TC07 Registration URL Validation
+        // =====================================================
 
-    // =====================================================
-    // TC06 - Registration Page Title
-    // =====================================================
+        test( 'TC07 - Registration URL Validation', async ({ page }) => {
 
-    test(
-        'TC06 - Registration Page Title',
+                await expect(page).toHaveURL(/register/);
+            }
+        );
 
-        {
-            tag: '@smoke'
-        },
+        // =====================================================
+        // TC08 First Name Visibility
+        // =====================================================
 
-        async ({ page }) => {
+        test( 'TC08 - First Name Visibility', async ({ page }) => {
 
-            // Verify Page Title
-            await expect(page)
-                .toHaveTitle(/ParaBank/);
-        }
-    );
+                const register = new RegisterPage(page);
 
-    // =====================================================
-    // TC07 - Registration URL Validation
-    // =====================================================
+                await expect( register.firstName).toBeVisible();
+            }
+        );
 
-    test(
-        'TC07 - Registration URL Validation',
+        // =====================================================
+        // TC09 Last Name Visibility
+        // =====================================================
 
-        async ({ page }) => {
+        test('TC09 - Last Name Visibility',async ({ page }) => {
 
-            // Verify URL
-            await expect(page)
-                .toHaveURL(/register/);
-        }
-    );
+                const register = new RegisterPage(page);
 
-    // =====================================================
-    // TC08 - First Name Field Visibility
-    // =====================================================
+                await expect( register.lastName ).toBeVisible();
+            }
+        );
 
-    test(
-        'TC08 - First Name Visibility',
+        // =====================================================
+        // TC10  Address Visibility
+        // =====================================================
 
-        async ({ page }) => {
+        test('TC10 - Address Visibility', async ({ page }) => {
 
-            const register = new RegisterPage(page);
+                const register = new RegisterPage(page);
 
-            // Verify First Name field
-            await expect(
-                register.firstName
-            ).toBeVisible();
-        }
-    );
+                await expect(register.address).toBeVisible();
+            }
+        );
 
-    // =====================================================
-    // TC09 - Last Name Field Visibility
-    // =====================================================
+        // =====================================================
+        // TC11  City Field Visibility
+        // =====================================================
 
-    test(
-        'TC09 - Last Name Visibility',
+        test('TC11 - City Field Visibility', async ({ page }) => {
 
-        async ({ page }) => {
+                const register =  new RegisterPage(page);
 
-            const register = new RegisterPage(page);
+                await expect( register.city).toBeVisible();
+            }
+        );
 
-            // Verify Last Name field
-            await expect(
-                register.lastName
-            ).toBeVisible();
-        }
-    );
+        // =====================================================
+        // TC12 State Field Visibility
+        // =====================================================
 
-    // =====================================================
-    // TC10 - Address Field Visibility
-    // =====================================================
+        test( 'TC12 - State Field Visibility', async ({ page }) => {
 
-    test(
-        'TC10 - Address Visibility',
+                const register = new RegisterPage(page);
 
-        async ({ page }) => {
+                await expect(register.state ).toBeVisible();
+            }
+        );
 
-            const register = new RegisterPage(page);
+        // =====================================================
+        // TC13 Zip Code Field Visibility'
+        // =====================================================
 
-            // Verify Address field
-            await expect(
-                register.address
-            ).toBeVisible();
-        }
-    );
+        test('TC13 - Zip Code Field Visibility',async ({ page }) => {
 
-});
+                const register = new RegisterPage(page);
+
+                await expect( register.zipCode ).toBeVisible();
+            }
+        );
+
+        // =====================================================
+        // TC14 Phone Number Field Visibility
+        // =====================================================
+
+        test('TC14 - Phone Number Field Visibility',async ({ page }) => {
+
+                const register = new RegisterPage(page);
+
+                await expect( register.phoneNumber ).toBeVisible();
+            }
+        );
+
+        // =====================================================
+        // TC15 SSN Field Visibility
+        // =====================================================
+
+        test('TC15 - SSN Field Visibility', async ({ page }) => {
+
+                const register = new RegisterPage(page);
+
+                await expect(register.ssn).toBeVisible();
+            }
+        );
+    }
+);

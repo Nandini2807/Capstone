@@ -1,72 +1,50 @@
-// Register Page Class
-
 class RegisterPage {
-
-    // Constructor
     constructor(page) {
 
-        // Store page object
         this.page = page;
 
-        // =====================================================
-        // Locators
-        // =====================================================
+        // First Name
+        this.firstName = page.locator('#customer\\.firstName' );
 
-        // First Name textbox
-        this.firstName =
-            page.locator('#customer\\.firstName');
+        // Last Name
+        this.lastName = page.locator('#customer\\.lastName');
 
-        // Last Name textbox
-        this.lastName =
-            page.locator('#customer\\.lastName');
+        // Address
+        this.address = page.locator('#customer\\.address\\.street');
 
-        // Address textbox
-        this.address =
-            page.locator('#customer\\.address\\.street');
+        // City
+        this.city = page.locator('#customer\\.address\\.city');
 
-        // City textbox
-        this.city =
-            page.locator('#customer\\.address\\.city');
+        // State
+        this.state = page.locator( '#customer\\.address\\.state');
 
-        // State textbox
-        this.state =
-            page.locator('#customer\\.address\\.state');
+        // Zip Code
+        this.zipCode = page.locator('#customer\\.address\\.zipCode' );
 
-        // Zip Code textbox
-        this.zipCode =
-            page.locator('#customer\\.address\\.zipCode');
+        // Phone Number
+        this.phoneNumber =page.locator('#customer\\.phoneNumber' );
 
-        // Phone Number textbox
-        this.phoneNumber =
-            page.locator('#customer\\.phoneNumber');
+        // SSN
+        this.ssn = page.locator('#customer\\.ssn');
 
-        // SSN textbox
-        this.ssn =
-            page.locator('#customer\\.ssn');
+        // Username
+        this.username = page.locator('#customer\\.username');
 
-        // Username textbox
-        this.username =
-            page.locator('#customer\\.username');
+        // Password
+        this.password = page.locator( '#customer\\.password');
 
-        // Password textbox
-        this.password =
-            page.locator('#customer\\.password');
+        // Confirm Password
+        this.confirmPassword = page.locator( '#repeatedPassword');
 
-        // Confirm Password textbox
-        this.confirmPassword =
-            page.locator('#repeatedPassword');
+        // Register Button
+        this.registerButton = page.locator('input[value="Register"]');
 
-        // Register button
-        this.registerButton =
-            page.locator('input[value="Register"]');
-
-        // Success message
-        this.successMessage =
-            page.locator('body');
+        // Success Message
+        this.successMessage = page.locator('body');
     }
 
     // =====================================================
-    // Open Register Page
+    // OPEN REGISTER PAGE
     // =====================================================
 
     async openRegisterPage() {
@@ -77,25 +55,25 @@ class RegisterPage {
     }
 
     // =====================================================
-    // Enter First Name
+    // ENTER FIRST NAME
     // =====================================================
 
     async enterFirstName(firstName) {
 
-        await this.firstName.fill(firstName);
+        await this.firstName.fill( firstName);
     }
 
     // =====================================================
-    // Enter Last Name
+    // ENTER LAST NAME
     // =====================================================
 
     async enterLastName(lastName) {
 
-        await this.lastName.fill(lastName);
+        await this.lastName.fill( lastName);
     }
 
     // =====================================================
-    // Enter Address
+    // ENTER ADDRESS
     // =====================================================
 
     async enterAddress(address) {
@@ -104,16 +82,16 @@ class RegisterPage {
     }
 
     // =====================================================
-    // Enter City
+    // ENTER CITY
     // =====================================================
 
     async enterCity(city) {
 
-        await this.city.fill(city);
+        await this.city.fill( city);
     }
 
     // =====================================================
-    // Enter State
+    // ENTER STATE
     // =====================================================
 
     async enterState(state) {
@@ -122,52 +100,52 @@ class RegisterPage {
     }
 
     // =====================================================
-    // Enter ZipCode
+    // ENTER ZIP CODE
     // =====================================================
 
     async enterZipCode(zipCode) {
 
-        await this.zipCode.fill(zipCode);
+        await this.zipCode.fill( zipCode);
     }
 
     // =====================================================
-    // Enter Phone Number
+    // ENTER PHONE NUMBER
     // =====================================================
 
     async enterPhoneNumber(phoneNumber) {
 
-        await this.phoneNumber.fill(phoneNumber);
+        await this.phoneNumber.fill( phoneNumber);
     }
 
     // =====================================================
-    // Enter SSN
+    // ENTER SSN
     // =====================================================
 
     async enterSSN(ssn) {
 
-        await this.ssn.fill(ssn);
+        await this.ssn.fill( ssn);
     }
 
     // =====================================================
-    // Enter Username
+    // ENTER USERNAME
     // =====================================================
 
     async enterUsername(username) {
 
-        await this.username.fill(username);
+        await this.username.fill( username);
     }
 
     // =====================================================
-    // Enter Password
+    // ENTER PASSWORD
     // =====================================================
 
     async enterPassword(password) {
 
-        await this.password.fill(password);
+        await this.password.fill( password);
     }
 
     // =====================================================
-    // Enter Confirm Password
+    // ENTER CONFIRM PASSWORD
     // =====================================================
 
     async enterConfirmPassword(password) {
@@ -176,7 +154,7 @@ class RegisterPage {
     }
 
     // =====================================================
-    // Click Register Button
+    // CLICK REGISTER BUTTON
     // =====================================================
 
     async clickRegisterButton() {
@@ -184,15 +162,17 @@ class RegisterPage {
         await this.registerButton.click();
     }
 
-    // Complete Registration
-   
+    // =====================================================
+    // COMPLETE REGISTRATION
+    // =====================================================
+
     async registerUser(user) {
 
         await this.enterFirstName(user.firstName);
 
-        await this.enterLastName(user.lastName);
+        await this.enterLastName(user.lastName );
 
-        await this.enterAddress(user.address);
+        await this.enterAddress( user.address);
 
         await this.enterCity(user.city);
 
@@ -200,7 +180,7 @@ class RegisterPage {
 
         await this.enterZipCode(user.zipCode);
 
-        await this.enterPhoneNumber(user.phoneNumber);
+        await this.enterPhoneNumber( user.phoneNumber);
 
         await this.enterSSN(user.ssn);
 
@@ -214,5 +194,5 @@ class RegisterPage {
     }
 }
 
-// Export RegisterPage Class
+// Export Class
 export default RegisterPage;
