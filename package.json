@@ -5,7 +5,7 @@
   "main": "index.js",
     "scripts": {
     "test:ci": "playwright test",
-    "allure:generate": "allure generate allure-results -o allure-report"
+    "allure:generate": "allure generate allure-results -o allure-report --clean "
   },
  
   "keywords": [],
