@@ -1,25 +1,26 @@
 
-import { test as base } from '@playwright/test';
+import { test as base, expect } from '@playwright/test';
 
 import { FindTransactionsPage }from '../pages/FindTransactionsPage';
+import { baseURL, testUsername, testPassword, navigationTimeout, elementTimeout } from '../config/test-config.js';
 
 export const test = base.extend({
 
     findTransactionsPage: async ({ page }, use) => {
 
         
-        await page.goto( 'https://parabank.parasoft.com/parabank/index.htm');
+        await page.goto(`${baseURL}/index.htm`, { waitUntil: 'networkidle', timeout: navigationTimeout });
 
-        await page.locator('input[name="username"]' ).fill('john');
+        await page.locator('input[name="username"]' ).fill(testUsername, { timeout: elementTimeout });
 
-        await page.locator('input[name="password"]' ).fill('demo');
+        await page.locator('input[name="password"]' ).fill(testPassword, { timeout: elementTimeout });
 
-        await page.locator('input[value="Log In"]' ).click();
+        await page.locator('input[value="Log In"]' ).click({ timeout: elementTimeout });
 
         await page.waitForURL(
             '**/overview.htm',
             {
-                timeout: 20000
+                timeout: navigationTimeout
             }
         );
 
@@ -34,5 +35,4 @@ export const test = base.extend({
     }
 });
 
-export { expect }
-from '@playwright/test';
+export { expect };

@@ -1,28 +1,38 @@
+import { baseURL, testUsername, testPassword, apiTimeout } from '../config/test-config.js';
+
 export default class ApiPage {
 
     constructor(request) {
 
         this.request = request;
 
-        this.baseURL ='https://parabank.parasoft.com/parabank/services/bank';
+        this.baseURL = `${baseURL}/services/bank`;
+        
+        // Default account/customer IDs (can be overridden in tests)
+        this.defaultAccountId = process.env.TEST_ACCOUNT_ID || '13344';
+        this.defaultCustomerId = process.env.TEST_CUSTOMER_ID || '12212';
     }
 
     // =====================================================
     // GET ACCOUNT DETAILS
     // =====================================================
 
-    async getAccountDetails() {
+    async getAccountDetails(accountId = this.defaultAccountId) {
 
-        return await this.request.get( `${this.baseURL}/accounts/13344`);
+        return await this.request.get( `${this.baseURL}/accounts/${accountId}`, {
+            timeout: apiTimeout
+        });
     }
 
     // =====================================================
     // GET CUSTOMER DETAILS
     // =====================================================
 
-    async getCustomerDetails() {
+    async getCustomerDetails(customerId = this.defaultCustomerId) {
 
-        return await this.request.get(  `${this.baseURL}/customers/12212`);
+        return await this.request.get(  `${this.baseURL}/customers/${customerId}`, {
+            timeout: apiTimeout
+        });
     }
 
     // =====================================================
@@ -31,44 +41,54 @@ export default class ApiPage {
 
     async getInvalidEndpoint() {
 
-        return await this.request.get(  `${this.baseURL}/invalid` );
+        return await this.request.get(  `${this.baseURL}/invalid`, {
+            timeout: apiTimeout
+        });
     }
 
     // =====================================================
     // LOGIN API
     // =====================================================
 
-    async loginAPI() {
+    async loginAPI(username = testUsername, password = testPassword) {
 
-        return await this.request.get( `${this.baseURL}/login/john/demo`);
+        return await this.request.get( `${this.baseURL}/login/${username}/${password}`, {
+            timeout: apiTimeout
+        });
     }
 
     // =====================================================
     // GET RESPONSE BODY
     // =====================================================
 
-    async getResponseBody() {
+    async getResponseBody(accountId = this.defaultAccountId) {
 
-        return await this.request.get( `${this.baseURL}/accounts/13344`);
+        return await this.request.get( `${this.baseURL}/accounts/${accountId}`, {
+            timeout: apiTimeout
+        });
     }
 
     // =====================================================
     // GET HEADERS
     // =====================================================
 
-    async getHeaders() {
-          return await this.request.get( `${this.baseURL}/accounts/13344` );
+    async getHeaders(accountId = this.defaultAccountId) {
+          return await this.request.get( `${this.baseURL}/accounts/${accountId}`, {
+              timeout: apiTimeout
+          });
     }
 
     // =====================================================
     // GET RESPONSE TIME
     // =====================================================
 
-    async getResponseTime() {
+    async getResponseTime(accountId = this.defaultAccountId) {
 
         const startTime = Date.now();
 
-        const response = await this.request.get( `${this.baseURL}/accounts/13344` );
+        const response = await this.request.get( `${this.baseURL}/accounts/${accountId}`, {
+            timeout: apiTimeout
+        });
 
         const endTime = Date.now();
 
