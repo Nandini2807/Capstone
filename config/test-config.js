@@ -1,14 +1,14 @@
 // Environment Configuration
-const baseURL = process.env.BASE_URL || 'https://parabank.parasoft.com/parabank';
-const testUsername = process.env.TEST_USERNAME || 'john';
-const testPassword = process.env.TEST_PASSWORD || 'demo';
+export const baseURL = process.env.BASE_URL || 'https://parabank.parasoft.com/parabank';
+export const testUsername = process.env.TEST_USERNAME || 'john';
+export const testPassword = process.env.TEST_PASSWORD || 'demo';
 
 // Timeouts
-const navigationTimeout = 30000; // 30s for page navigation
-const elementTimeout = 15000;   // 15s for element visibility
-const apiTimeout = 10000;       // 10s for API calls
+export const navigationTimeout = 30000; // 30s for page navigation
+export const elementTimeout = 15000;   // 15s for element visibility
+export const apiTimeout = 10000;       // 10s for API calls
 
-module.exports = {
+export default {
   baseURL,
   testUsername,
   testPassword,

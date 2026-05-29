@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
     "scripts": {
-    "test": "node -r dotenv/config --loader=./env-loader.js ./node_modules/.bin/playwright test",
+    "test": "playwright test",
     "test:ci": "playwright test",
     "allure:generate": "allure generate allure-results -o allure-report --clean"
   },
@@ -12,7 +12,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
