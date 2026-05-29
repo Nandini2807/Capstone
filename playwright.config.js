@@ -37,7 +37,7 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-<<<<<<< HEAD
+ 
 
     {
       name: 'firefox',
