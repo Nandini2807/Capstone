@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import RegisterPage from '../pages/RegisterPage';
 import registerData from '../test-data/registerData.json';
+import { baseURL, navigationTimeout } from '../config/test-config.js';
 
 // =====================================================
 // REGISTRATION MODULE
@@ -11,7 +12,8 @@ test.describe.parallel(
     'Registration Module',() => {
         test.beforeEach( async ({ page }) => {
                 await page.goto(
-                    'https://parabank.parasoft.com/parabank/register.htm'
+                    `${baseURL}/register.htm`,
+                    { waitUntil: 'networkidle', timeout: navigationTimeout }
                 );
             }
         );

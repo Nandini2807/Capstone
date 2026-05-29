@@ -3,6 +3,7 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
 import loginData from '../test-data/loginData.json';
+import { baseURL, navigationTimeout } from '../config/test-config.js';
 
 test.describe('Authentication Module', () => {
 
@@ -13,7 +14,8 @@ test.describe('Authentication Module', () => {
     test.beforeEach(async ({ page }) => {
 
         await page.goto(
-            'https://parabank.parasoft.com/parabank/index.htm'
+            `${baseURL}/index.htm`,
+            { waitUntil: 'networkidle', timeout: navigationTimeout }
         );
     });
 

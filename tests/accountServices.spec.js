@@ -3,13 +3,17 @@
 import { test, expect }from '@playwright/test';
 import AccountPage from '../pages/AccountPage';
 import accountData from '../test-data/accountServicesData.json';
+import { baseURL, navigationTimeout } from '../config/test-config.js';
 
 test.describe(
     'Account Services Module',() => {
 
         test.beforeEach(async ({ page }) => {
 
-                 await page.goto( accountData.url );
+                 await page.goto( accountData.url || `${baseURL}/index.htm`, {
+                     waitUntil: 'networkidle',
+                     timeout: navigationTimeout
+                 });
             }
         );
 

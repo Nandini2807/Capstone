@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
     "scripts": {
+    "test": "node -r dotenv/config --loader=./env-loader.js ./node_modules/.bin/playwright test",
     "test:ci": "playwright test",
-    "allure:generate": "allure generate allure-results -o allure-report --clean "
+    "allure:generate": "allure generate allure-results -o allure-report --clean"
   },
  
   "keywords": [],
@@ -16,7 +17,8 @@
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
     "allure-commandline": "^2.42.0",
-    "allure-playwright": "^3.9.0"
+    "allure-playwright": "^3.9.0",
+    "dotenv": "^16.0.3"
   },
     "dependencies": {
     "@faker-js/faker": "^9.9.0"

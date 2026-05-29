@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { TransferPage } from '../pages/TransferPage';
+import { baseURL, testUsername, testPassword, navigationTimeout, elementTimeout } from '../config/test-config.js';
 
 test.describe.parallel('Transfer Funds Module - 15 Test Cases', () => {
 
@@ -12,20 +13,21 @@ test.describe.parallel('Transfer Funds Module - 15 Test Cases', () => {
     test.beforeEach(async ({ page }) => {
 
         await page.goto(
-            'https://parabank.parasoft.com/parabank/index.htm',
+            `${baseURL}/index.htm`,
             {
-                waitUntil: 'domcontentloaded'
+                waitUntil: 'networkidle',
+                timeout: navigationTimeout
             }
         );
 
         // LOGIN
-        await page.locator('input[name="username"]').fill('john');
+        await page.locator('input[name="username"]').fill(testUsername, { timeout: elementTimeout });
 
-        await page.locator('input[name="password"]').fill('demo');
+        await page.locator('input[name="password"]').fill(testPassword, { timeout: elementTimeout });
 
-        await page.locator('input[value="Log In"]').click();
+        await page.locator('input[value="Log In"]').click({ timeout: elementTimeout });
 
-        await page.waitForURL('**/overview.htm');
+        await page.waitForURL('**/overview.htm', { timeout: navigationTimeout });
 
         transferPage = new TransferPage(page);
 

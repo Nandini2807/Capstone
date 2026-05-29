@@ -3,6 +3,7 @@
 import { test, expect }from '@playwright/test';
 import OpenAccountPage from '../pages/OpenAccountPage';
 import openAccountData from '../test-data/openAccountData.json';
+import { baseURL, navigationTimeout, elementTimeout } from '../config/test-config.js';
 
 
 
@@ -11,10 +12,11 @@ test.describe.parallel(
      test.beforeEach(async ({ page }) => {
 
                 await page.goto(
-                    'https://parabank.parasoft.com/parabank/index.htm',
+                    `${baseURL}/index.htm`,
                     {
                         waitUntil:
-                        'domcontentloaded'
+                        'networkidle',
+                        timeout: navigationTimeout
                     }
                 );
 
@@ -22,23 +24,25 @@ test.describe.parallel(
                 await page.locator('input[name="username"]').fill(
                     openAccountData
                     .validUser
-                    .username
+                    .username,
+                    { timeout: elementTimeout }
                 );
 
                 await page.locator(
                     'input[name="password"]').fill(
                     openAccountData
                     .validUser
-                    .password
+                    .password,
+                    { timeout: elementTimeout }
                 );
 
                 // Click Login
-                await page.locator('input[value="Log In"]' ).click();
+                await page.locator('input[value="Log In"]' ).click({ timeout: elementTimeout });
 
                 // Wait for successful login
             await page.waitForURL( '**/overview.htm',
                     {
-                        timeout: 20000
+                        timeout: navigationTimeout
                     }
                 );
             }

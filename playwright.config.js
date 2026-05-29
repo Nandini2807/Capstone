@@ -99,11 +99,18 @@
 
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Load environment variables
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
   testDir: './tests',
 
-  timeout: 60000,
+  timeout: process.env.CI ? 120000 : 60000,
 
   
 
@@ -111,9 +118,9 @@ export default defineConfig({
 
   forbidOnly: !!process.env.CI,
 
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
 
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 4,
 
   reporter: [
     ['html'],
@@ -122,9 +129,9 @@ export default defineConfig({
   ],
 
   use: {
-    headless: false,
+    headless: !!process.env.CI,
 
-    slowMo: 1000,
+    slowMo: process.env.CI ? 0 : 500,
     storageState: undefined,
 
     trace: 'on-first-retry',
