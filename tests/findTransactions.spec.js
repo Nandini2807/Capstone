@@ -237,7 +237,7 @@ test('@regression Timeout Validation',async ({ findTransactionsPage }) => {
 // 15. FIXME
 // ======================================================
 
-test.fixme('@fixme Backend Issue Validation',async ({ findTransactionsPage }) => {
+test(' Backend Issue Validation',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -260,3 +260,84 @@ test('@regression Page Refresh Validation',async ({ findTransactionsPage }) => {
 
     await expect.soft( findTransactionsPage.amountInput ).toBeVisible();
 });
+
+// ======================================================
+// 17. FIND TRANSACTIONS PAGE HEADER VALIDATION
+// ======================================================
+
+test.skip('@ui Page Header Validation',async ({ findTransactionsPage }) => {
+
+    await findTransactionsPage.open(); await expect.poll(async () => {
+
+        return await findTransactionsPage.page
+            .locator('body')
+            .textContent();
+
+    }, {
+        timeout: 10000
+    }).toContain('Find Transactions');
+
+    await expect.soft( findTransactionsPage.page.locator('text=Find Transactions') ).toBeVisible();
+});
+
+// TC18 Transaction ID Field Visible
+
+test('@ui Transaction ID Field Visible',async ({ findTransactionsPage }) => {
+
+  await findTransactionsPage.open();
+
+  await expect(
+    findTransactionsPage.transactionIdInput
+  ).toBeVisible();
+});
+
+// TC19 Date Field Visible
+
+test('@ui Date Field Visible',async ({ findTransactionsPage }) => {
+
+  await findTransactionsPage.open();
+
+  await expect(
+    findTransactionsPage.dateInput
+  ).toBeVisible();
+});
+
+// TC20 Amount Field Visible
+
+test('@ui Amount Field Visible',async ({ findTransactionsPage }) => {
+
+  await findTransactionsPage.open();
+
+  await expect(
+    findTransactionsPage.amountInput
+  ).toBeVisible();
+});
+
+// TC21 Transaction ID Data Entry
+
+test('@regression Transaction ID Data Entry',async ({ findTransactionsPage }) => {
+
+  await findTransactionsPage.open();
+
+  await findTransactionsPage.transactionIdInput.fill('12345');
+
+  await expect(
+    findTransactionsPage.transactionIdInput
+  ).toHaveValue('12345');
+});
+
+// TC22
+
+test('@regression Amount Data Entry',async ({ findTransactionsPage }) => {
+
+  await findTransactionsPage.open();
+
+  await findTransactionsPage.amountInput.fill('100');
+
+  await expect(
+    findTransactionsPage.amountInput
+  ).toHaveValue('100');
+});
+ 
+
+

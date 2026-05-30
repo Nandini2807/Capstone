@@ -226,3 +226,66 @@ test('@smoke End to End Bill Pay Flow', async ({ billPayPage }) => {
 
   await expect.poll(() => billPayPage.successMsg.isVisible()).toBeTruthy();
 });
+
+/* =====================================================
+   16. PAYEE FIELD VISIBLE
+===================================================== */
+test('@ui Payee Field Visible', async ({ billPayPage }) => {
+
+  await billPayPage.open();
+
+  await expect(billPayPage.payee).toBeVisible();
+});
+
+/* =====================================================
+   17. AMOUNT FIELD VISIBLE
+===================================================== */
+test('@ui Amount Field Visible', async ({ billPayPage }) => {
+
+  await billPayPage.open();
+
+  await expect(billPayPage.amount).toBeVisible();
+});
+
+/* =====================================================
+   18. SEND PAYMENT BUTTON VISIBLE
+===================================================== */
+test('@ui Send Payment Button Visible', async ({ billPayPage }) => {
+
+  await billPayPage.open();
+
+  await expect(billPayPage.sendBtn ).toBeVisible();
+});
+
+/* =====================================================
+   19. ACCOUNT NUMBER MATCH VALIDATION
+===================================================== */
+test('@regression Account Number Match Validation',async ({ billPayPage }) => {
+
+  await billPayPage.open();
+
+  await billPayPage.account.fill('12345');
+
+  await billPayPage.verifyAccount.fill('12345');
+
+  await expect( billPayPage.account).toHaveValue('12345');
+
+  await expect( billPayPage.verifyAccount).toHaveValue('12345');
+});
+
+/* =====================================================
+   20. FORM DATA ENTRY VALIDATION
+===================================================== */
+test('@smoke Form Data Entry Validation',async ({ billPayPage }) => {
+
+  await billPayPage.open();
+
+  await billPayPage.fillForm(
+    'Electricity Board',
+    '500'
+  );
+
+  await expect(billPayPage.payee).toHaveValue('Electricity Board');
+
+  await expect(billPayPage.amount).toHaveValue('500');
+});
