@@ -173,7 +173,7 @@ test.describe(
         // TC12 Password Enabled
         // =================================================
 
-        test.skip('TC12 - Password Enabled', async ({ page }) => {
+        test('TC12 - Password Enabled', async ({ page }) => {
 
                 const account = new AccountPage(page);
 

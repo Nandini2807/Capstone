@@ -55,45 +55,49 @@ test.describe('Authentication Module', () => {
         await expect(page).toHaveURL(/overview/);
     });
 
-    // =====================================================
-    // TC02 - INVALID USERNAME
-    // =====================================================
+   // =====================================================
+// TC02 - INVALID USERNAME
+// =====================================================
+   
+test('TC02 - Invalid Username', async ({ page }) => {
 
-    test('TC02 - Invalid Username', async ({ page }) => {
+    const login = new LoginPage(page);
 
-        const login = new LoginPage(page);
+    await login.login(
+        loginData.invalidUsername.username,
+        loginData.invalidUsername.password
+    );
 
-        await login.login(
+    await expect(login.errorMessage) .toBeVisible({ timeout: 10000 });
 
-            loginData.invalidUsername.username,
+    await expect(login.errorMessage) .toContainText('could not be verified');
+});
 
-            loginData.invalidUsername.password
-        );
 
-        await expect(login.errorMessage)
-            .toContainText('could not be verified');
-    });
 
-    // =====================================================
-    // TC03 - INVALID PASSWORD
-    // =====================================================
 
-    test('TC03 - Invalid Password', async ({ page }) => {
 
-        const login = new LoginPage(page);
 
-        await login.login(
 
-            loginData.invalidPassword.username,
+// =====================================================
+// TC03 - INVALID PASSWORD
+// =====================================================
+     
+   test('TC03 - Invalid Password', async ({ page }) => {
 
-            loginData.invalidPassword.password
-        );
+    const login = new LoginPage(page);
 
-        await expect(login.errorMessage)
-            .toContainText('could not be verified');
-    });
+    await login.login(
+        loginData.invalidPassword.username,
+        loginData.invalidPassword.password
+    );
 
-    // =====================================================
+    await expect(login.errorMessage)  .toBeVisible({ timeout: 10000 });
+
+    await expect(login.errorMessage) .toContainText('could not be verified');
+});
+
+ // =====================================================
     // TC04 - EMPTY USERNAME
     // =====================================================
 

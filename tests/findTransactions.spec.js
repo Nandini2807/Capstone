@@ -16,8 +16,7 @@ const expectResultVisible =async (findTransactionsPage) => {
 // 1. SEARCH BY VALID TRANSACTION ID
 // ======================================================
 
-test('@smoke Search By Transaction ID',
-async ({ findTransactionsPage }) => {
+test('@smoke Search By Transaction ID',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -32,8 +31,7 @@ async ({ findTransactionsPage }) => {
 // 2. INVALID TRANSACTION ID
 // ======================================================
 
-test('@negative Invalid Transaction ID',
-async ({ findTransactionsPage }) => {
+test('@negative Invalid Transaction ID', async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -48,8 +46,7 @@ async ({ findTransactionsPage }) => {
 // 3. SEARCH BY DATE
 // ======================================================
 
-test('@smoke Search By Date',
-async ({ findTransactionsPage }) => {
+test('@smoke Search By Date',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -62,8 +59,7 @@ async ({ findTransactionsPage }) => {
 // 4. INVALID DATE FORMAT
 // ======================================================
 
-test('@negative Invalid Date',
-async ({ findTransactionsPage }) => {
+test('@negative Invalid Date',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -78,8 +74,7 @@ async ({ findTransactionsPage }) => {
 // 5. SEARCH BY AMOUNT
 // ======================================================
 
-test('@smoke Search By Amount',
-async ({ findTransactionsPage }) => {
+test('@smoke Search By Amount',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -94,8 +89,7 @@ async ({ findTransactionsPage }) => {
 // 6. INVALID AMOUNT
 // ======================================================
 
-test('@negative Invalid Amount',
-async ({ findTransactionsPage }) => {
+test('@negative Invalid Amount',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -110,8 +104,7 @@ async ({ findTransactionsPage }) => {
 // 7. EMPTY SEARCH
 // ======================================================
 
-test('@negative Empty Search',
-async ({ findTransactionsPage }) => {
+test('@negative Empty Search',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -126,8 +119,7 @@ async ({ findTransactionsPage }) => {
 // 8. UI VALIDATION
 // ======================================================
 
-test('@ui UI Validation',
-async ({ findTransactionsPage }) => {
+test('@ui UI Validation',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -142,9 +134,7 @@ async ({ findTransactionsPage }) => {
 // 9. TRANSACTION TABLE VALIDATION
 // ======================================================
 
-test('@regression Transaction Table Validation',
-
-async ({ findTransactionsPage }) => {
+test('@regression Transaction Table Validation',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -159,8 +149,7 @@ async ({ findTransactionsPage }) => {
 // 10. NAVIGATION VALIDATION
 // ======================================================
 
-test('@smoke Navigation Validation',
-async ({ findTransactionsPage }) => {
+test('@smoke Navigation Validation',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -173,8 +162,7 @@ async ({ findTransactionsPage }) => {
 // 11. SESSION VALIDATION
 // ======================================================
 
-test('@regression Session Validation',
-async ({ findTransactionsPage }) => {
+test('@regression Session Validation',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -188,8 +176,7 @@ async ({ findTransactionsPage }) => {
 // 12. MULTIPLE SEARCH
 // ======================================================
 
-test('@regression Multiple Search',
-async ({ findTransactionsPage }) => {
+test('@regression Multiple Search',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
@@ -208,8 +195,7 @@ async ({ findTransactionsPage }) => {
 // 13. STEP VALIDATION
 // ======================================================
 
-test('@smoke Step Validation',
-async ({ findTransactionsPage }) => {
+test('@smoke Step Validation',async ({ findTransactionsPage }) => {
 
     await test.step('Open Page', async () => {
 
@@ -234,8 +220,7 @@ async ({ findTransactionsPage }) => {
 // 14. TIMEOUT VALIDATION
 // ======================================================
 
-test('@regression Timeout Validation',
-async ({ findTransactionsPage }) => {
+test('@regression Timeout Validation',async ({ findTransactionsPage }) => {
 
     test.setTimeout(60000);
 
@@ -252,12 +237,26 @@ async ({ findTransactionsPage }) => {
 // 15. FIXME
 // ======================================================
 
-test.fixme(
-'@fixme Backend Issue Validation',
-
-async ({ findTransactionsPage }) => {
+test.fixme('@fixme Backend Issue Validation',async ({ findTransactionsPage }) => {
 
     await findTransactionsPage.open();
 
     await findTransactionsPage.searchByAmount('999999');
+});
+
+// ======================================================
+// 16. PAGE REFRESH VALIDATION
+// ======================================================
+
+test('@regression Page Refresh Validation',async ({ findTransactionsPage }) => {
+
+    await findTransactionsPage.open();
+
+    await findTransactionsPage.page.reload();
+
+    await expect(  findTransactionsPage.transactionIdInput ).toBeVisible();
+
+    await expect.soft( findTransactionsPage.dateInput ).toBeVisible();
+
+    await expect.soft( findTransactionsPage.amountInput ).toBeVisible();
 });
